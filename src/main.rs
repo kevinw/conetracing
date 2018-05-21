@@ -113,8 +113,8 @@ impl Actor for MainScene {
 
 #[derive(Actor)]
 pub struct Crt {
-    rt: Rc<RenderTexture>,
-    cube: Handle<GameObject>,
+    //rt: Rc<RenderTexture>,
+    //cube: Handle<GameObject>,
     time: f64,
     frame_count: i32,
 }
@@ -122,8 +122,8 @@ pub struct Crt {
 impl Crt {
     fn new() -> Crt {
         Crt {
-            rt: Rc::new(RenderTexture::new(1024, 1024, TextureAttachment::Color0)),
-            cube: GameObject::empty(),
+            //rt: Rc::new(RenderTexture::new(1024, 1024, TextureAttachment::Color0)),
+            //cube: GameObject::empty(),
             time: 0f64,
             frame_count: 0,
         }
@@ -142,28 +142,24 @@ impl Actor for Crt {
             let db = &mut world.asset_system();
 
             let material = Material::new(db.new_program("conetracing"));
-            material.set("uDiffuse", self.rt.as_texture());
+            //material.set("uDiffuse", self.rt.as_texture());
             material.set("iResolution", Vector3::new(800f32, 600f32, 1f32));
 
             let mut mesh = Mesh::new();
             mesh.add_surface(db.new_mesh_buffer("screen_quad"), material);
             go.add_component(mesh);
         }
-
-        // Added a cube in the scene
-        self.cube = world.new_game_object();
-        self.cube.borrow_mut().add_component(Cube::new());
     }
 
     fn update(&mut self, go: &mut GameObject, world: &mut World) {
         // Setup fb for camera
-        let cam_borrow = world.current_camera().unwrap();
-        let mut cam = cam_borrow.borrow_mut();
+        //let cam_borrow = world.current_camera().unwrap();
+        //let mut cam = cam_borrow.borrow_mut();
 
-        cam.render_texture = Some(self.rt.clone());
+        //cam.render_texture = Some(self.rt.clone());
 
         // Setup proper viewport to render to the whole texture
-        cam.rect = Some(((0, 0), (1024, 1024)));
+        //cam.rect = Some(((0, 0), (1024, 1024)));
 
         {
             let result = go.find_component::<Mesh>();
@@ -177,6 +173,7 @@ impl Actor for Crt {
             }
         }
 
+        /*
         // show only cube
         // TODO it is a little bit hacky, we should support a PostProcessing Component
         self.cube.borrow_mut().active = true;
@@ -192,9 +189,11 @@ impl Actor for Crt {
         // Clean up stuffs in camera, as later we could render normally
         cam.render_texture = None;
         cam.rect = None;
+        */
     }
 }
 
+/*
 #[derive(Actor)]
 pub struct Cube {}
 
@@ -226,6 +225,7 @@ impl Actor for Cube {
         go.transform.set_global(gtran);
     }
 }
+*/
 
 pub fn main() {
     let mut world = WorldBuilder::new("conetracing")
