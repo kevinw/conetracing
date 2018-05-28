@@ -1,9 +1,12 @@
 #include "shadertoy.glsl"
 
-#define MAX_MARCHING_STEPS 255
+#define MAX_MARCHING_STEPS 255.0
 const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
+
+uniform vec3 spring_pos;
+
 
 /**
  * Constructive solid geometry intersection operation on SDF-calculated distances.
@@ -61,6 +64,7 @@ float sphereSDF(vec3 p) {
  * negative indicating inside.
  */
 float sceneSDF(vec3 samplePoint) {
+    samplePoint += spring_pos / 400.0;
     float sphereDist = sphereSDF(samplePoint / 1.2) * 1.2;
     float cubeDist = cubeSDF(samplePoint);
     return opU(cubeDist, sphereDist);
@@ -78,7 +82,7 @@ float sceneSDF(vec3 samplePoint) {
  */
 float shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, float end) {
     float depth = start;
-    for (float i = 0; i < MAX_MARCHING_STEPS; i++) {
+    for (float i = 0.0; i < MAX_MARCHING_STEPS; i++) {
         float dist = sceneSDF(eye + depth * marchingDirection);
         if (dist < EPSILON) {
 			return depth;

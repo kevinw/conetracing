@@ -6,3 +6,4 @@ authors = ["Kevin Watters <kevinwatters@gmail.com>"]
 [dependencies]
 unrust = { path = "../unrust" }
 unrust-derive = { path = "../unrust/unrust-derive" }
+num = "*"
